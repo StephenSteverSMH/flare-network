@@ -9,6 +9,7 @@ const (
 	NEIGHBOR_UPD
 	NEIGHBOR_RST
 	NEIGHBOR_ACK
+	NEIGHBOR_DESTROY
 )
 
 // 数据发现包
@@ -99,6 +100,7 @@ func (msg *DiscoverMsg)ConvertFromRaw(raw []byte){
 			raw_n2_cap := raw[base:base+4]
 			base+=4
 			raw_status := raw[base]
+			base+=1
 			// N1
 			copy(msg.NewRoute[i].N1[:], raw_n1)
 			// N2

@@ -17,11 +17,17 @@ func (server *Server)CreateChannel(to node.NodeAddress, netAddr net.TCPAddr, cap
 		Data:init_msg,
 
 	}
+	// hook
 	server.node.EventChannel <- event
 }
 
 func (server *Server)DestoryChannel(to node.NodeAddress){
-	//destroy_msg := node.DestoryChannelNotify{
-	//	To:to
-	//}
+	destroy_msg := node.DestoryChannelNotify{
+		To:to,
+	}
+	event := node.Event{
+		Type: node.CHAN_DOWN,
+		Data: destroy_msg,
+	}
+	server.GetNode().EventChannel <- event
 }

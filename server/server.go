@@ -11,17 +11,22 @@ import (
 type Server struct {
 	node node.LightNode
 }
+func (server *Server)GetNode() node.LightNode{
+	return server.node
+}
 func (server *Server)StartNodeServer(ip string, port string) error{
 	server.node = node.CreateNode(2, 5)
 	tcpAddr, err := net.ResolveTCPAddr("tcp", ip+":"+port)
 	server.node.NetAddr = tcpAddr
 	if err!=nil{
 		// 打印本地节点地址解析失败
+		fmt.Println("打印本地节点地址解析失败")
 		return err
 	}
 	listen, err := net.ListenTCP("tcp", tcpAddr)
 	if err!=nil{
 		// 打印监听地址失败
+		fmt.Println("打印监听地址失败", err)
 		return err
 	}
 	go server.node.ProcessEvent()
@@ -29,6 +34,7 @@ func (server *Server)StartNodeServer(ip string, port string) error{
 		conn, err := listen.Accept()
 		if err != nil {
 			// 打印获取连接失败
+			fmt.Println("打印获取连接失败")
 			break
 		}
 		go server.HandleConn(conn)
@@ -101,7 +107,7 @@ func getPacket(conn net.Conn) (network.Packet, error){
 		// 发生其他错误
 		return packet, err
 	}
-	packet.Type = int(utils.BytesToInt32(raw_type))
+	packet.Type = int(raw_type[0])
 	packet.Size = int(utils.BytesToInt32(raw_size))
 	packet.Payload = make([]byte, packet.Size)
 	_, err = conn.Read(packet.Payload)

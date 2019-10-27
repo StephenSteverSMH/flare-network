@@ -1,18 +1,20 @@
 package node
 
-import "bytes"
+import (
+	"bytes"
+)
 
 // 判断Channels是否包含这个Channel
 func IsChannelsInclude(channels Channels, newChannel Channel) bool{
 	for _, channel :=range channels{
 		if bytes.Equal(channel.N1[:], newChannel.N1[:])&&bytes.Equal(channel.N2[:], newChannel.N2[:]){
-			return false
+			return true
 		}
 		if bytes.Equal(channel.N1[:], newChannel.N2[:])&&bytes.Equal(channel.N2[:], newChannel.N1[:]){
-			return false
+			return true
 		}
 	}
-	return true
+	return false
 }
 // 从Channels中移除这个Channel
 func RemoveChannel(channels Channels, newChannel Channel) Channels{
